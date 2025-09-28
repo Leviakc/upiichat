@@ -72,6 +72,144 @@
   </div>
 
   <div class="sidebar-footer">
+    <button class="more-tools-btn" id="openMoreToolsModal">
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="m7.5 4.27 9 5.15" />
+        <path
+          d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"
+        />
+        <path d="m3.3 7 8.7 5 8.7-5" />
+        <path d="M12 22V12" />
+      </svg>
+      <span class="sidebar-text">Más herramientas</span>
+    </button>
+    <modal-window for="openMoreToolsModal">
+      <div class="tools-modal">
+        <div class="tools-modal-header">
+          <h2>🛠️ Herramientas Estudiantiles</h2>
+          <p>Recursos útiles creados por y para estudiantes del IPN</p>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-info">
+            <div class="tool-icon">🔧</div>
+            <div class="tool-details">
+              <h3>SAES Fill-Form</h3>
+              <p>
+                Automatiza las evaluaciones docentes en solo 3 clics. Accede a
+                tus calificaciones más rápido.
+              </p>
+              <div class="tool-meta">
+                <span class="tool-type">Extensión Chrome</span>
+                <span class="tool-author">Por Juan Gomen</span>
+              </div>
+            </div>
+          </div>
+          <a
+            href="https://chromewebstore.google.com/detail/saes-fill-form/hlgobbbmkdngojnbhcfhnghjlpnkfelb"
+            target="_blank"
+            class="tool-link"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15,3 21,3 21,9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Instalar
+          </a>
+        </div>
+
+        <div class="tool-item">
+          <div class="tool-info">
+            <div class="tool-icon">📚</div>
+            <div class="tool-details">
+              <h3>Generador de Reportes</h3>
+              <p>
+                Genera y consulte reportes de servicios sociales o prácticas
+                profesionales de manera eficiente y profesional
+              </p>
+              <div class="tool-meta">
+                <span class="tool-type">Web App</span>
+                <span class="tool-author">Mike Portilla</span>
+              </div>
+            </div>
+          </div>
+          <a
+            href="https://mik318.github.io/reportes-ss-generator/#/home"
+            class="tool-link"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+              />
+              <polyline points="15,3 21,3 21,9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Usar
+          </a>
+        </div>
+
+        <div class="tool-item contribute-card">
+          <div class="tool-info">
+            <div class="tool-icon">✨</div>
+            <div class="tool-details">
+              <h3>¿Tienes una herramienta útil?</h3>
+              <p>
+                Comparte tu proyecto con la comunidad estudiantil del IPN y
+                ayuda a otros compañeros.
+              </p>
+              <div class="tool-meta">
+                <span class="tool-type">Próximamente</span>
+                <span class="tool-author">Tu contribución</span>
+              </div>
+            </div>
+          </div>
+          <a
+            href="https://github.com/EduDN/CHATBOT-UPIICSA/pulls"
+            class="tool-link contribute"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"
+              />
+            </svg>
+            Contribuir
+          </a>
+        </div>
+      </div>
+      <button slot="close-button" class="tools-modal-button">Cerrar</button>
+    </modal-window>
+
     <button class="settings-btn" id="openSettingsModal">
       <svg
         width="22"

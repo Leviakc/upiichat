@@ -14,11 +14,13 @@ technologías web.
 
 ### **Mejoras de UI/UX**
 
-- [ ] Crear componente toast para notificaciones breves
-- [ ] Create componente tooltip para sugerencias de UI
-- [ ] Implementar UUID fallback si no está disponible `crypto.randomUUID()`
-- [x] Crear un componente modal para mostrar información adicional o configuraciones
 - [ ] Implementar menú de tres puntos para editar/eliminar chats (con long-press en móvil)
+- [ ] Crear componente toast para notificaciones breves
+- [ ] Crear componente tooltip para sugerencias de UI
+- [ ] Implementar UUID fallback si no está disponible `crypto.randomUUID()`
+- [ ] Mejorar accesibilidad de modal:
+  - [ ] Gestionar el foco del teclado al abrir/cerrar el modal
+  - [ ] Añadir atributos ARIA (`role="dialog"`, `aria-modal="true"`)
 
 ### **Arquitectura y Despliegue**
 
@@ -26,10 +28,10 @@ technologías web.
 
 ### **Futuras Funcionalidades y Características Avanzadas**
 
-- [ ] Integrar WebLLM con RAG (_Retrieval-Augmented Generation_) para dispositivos potentes
+- [x] Agregar opción de "Más herramientas" para mostrar herramientas adicionales que pueden ser útiles para los estudiantes como [saes fill-form](https://chromewbstore.google.com/detail/saes%20fill-form/hlgobbbmkdngojnbhcfhnghjlpnkfelb)
 - [ ] Sistema de feedback con Google Sheets como backend
 - [ ] Funcionalidad de búsqueda en historial de chats
-- [ ] Agregar opción de "Más herramientas" para mostrar herramientas adicionales que pueden ser útiles para los estudiantes como [saes fill-form](https://chromewebstore.google.com/detail/saes%20fill-form/hlgobbbmkdngojnbhcfhnghjlpnkfelb)
+- [ ] Integrar WebLLM con RAG (_Retrieval-Augmented Generation_) para dispositivos potentes
 
 ## **✅ Funcionalidades Completadas**
 
@@ -48,7 +50,7 @@ technologías web.
 - [x] Arreglar "New chat" error para mobile
 - [x] Add vercel json to redirect everything to the SPA
 - [x] Implementar un historial de chat persistente usando `localStorage`
-- [x] Crear un componente tooltip para sugerencias de UI
+- [x] Crear un componente modal para mostrar información adicional o configuraciones
 
 ### **Arquitectura y Despliegue**
 
