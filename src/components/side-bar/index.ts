@@ -4,6 +4,7 @@ import style from "./style.css?inline";
 import { Router } from "@/services/router";
 import { storageService } from "@/services/store";
 import type { ChatDisplayItem } from "@/types/chat";
+import { ActionMenu, type MenuItemConfig } from "../common/action-menu";
 
 class Sidebar extends BaseComponent {
   private isCollapsed = true; // Start collapsed
@@ -197,6 +198,20 @@ class Sidebar extends BaseComponent {
     // Clear existing chats
     this.$chatList.innerHTML = "";
 
+    // Add test chat for action menu demo (temporary)
+    if (chats.length === 0) {
+      const testChat: ChatDisplayItem = {
+        id: "test-chat-1",
+        title: "Como registrar materias?",
+        preview: "Hola, necesito ayuda con el registro...",
+        timeDisplay: "2h ago",
+        isActive: false,
+        messageCount: 5,
+        isEditable: true,
+      };
+      chats.push(testChat);
+    }
+
     // Add each chat
     chats.forEach((chat) => {
       const chatElement = this.createChatElement(chat);
@@ -237,9 +252,92 @@ class Sidebar extends BaseComponent {
         <div class="chat-title">${chat.title}</div>
         <div class="chat-time">${chat.timeDisplay}</div>
       </div>
+      <button class="chat-actions-btn" data-chat-id="${chat.id}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="1"/>
+          <circle cx="12" cy="5" r="1"/>
+          <circle cx="12" cy="19" r="1"/>
+        </svg>
+      </button>
     `;
 
+    // Setup action menu
+    this.setupChatActionMenu(li, chat);
+
     return li;
+  }
+
+  private setupChatActionMenu(
+    chatElement: HTMLLIElement,
+    chat: ChatDisplayItem,
+  ): void {
+    const actionBtn = chatElement.querySelector(
+      ".chat-actions-btn",
+    ) as HTMLButtonElement;
+    const chatContent = chatElement.querySelector(
+      ".chat-content",
+    ) as HTMLElement;
+
+    if (!actionBtn || !chatContent) return;
+
+    // Create action menu instance
+    const actionMenu = new ActionMenu();
+
+    // Define menu items
+    const menuItems: MenuItemConfig[] = [
+      {
+        id: "rename",
+        label: "Renombrar",
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9"/>
+          <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>`,
+        action: () => this.handleRenameChat(chat.id, chat.title),
+      },
+      {
+        id: "duplicate",
+        label: "Duplicar",
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>`,
+        action: () => this.handleDuplicateChat(chat.id),
+      },
+      { type: "separator" },
+      {
+        id: "delete",
+        label: "Eliminar",
+        variant: "danger",
+        icon: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3,6 5,6 21,6"/>
+          <path d="m19,6v14a2,2 0 0 1-2,2H7a2,2 0 0 1-2-2V6m3,0V4a2,2 0 0 1,2-2h4a2,2 0 0 1,2,2v2"/>
+          <line x1="10" y1="11" x2="10" y2="17"/>
+          <line x1="14" y1="11" x2="14" y2="17"/>
+        </svg>`,
+        action: () => this.handleDeleteChat(chat.id, chat.title),
+      },
+    ];
+
+    // Setup desktop click trigger
+    actionMenu.setupTrigger(actionBtn, menuItems);
+
+    // Setup mobile long-press trigger
+    actionMenu.setupTrigger(chatContent, menuItems, { longPress: true });
+  }
+
+  private handleRenameChat(chatId: string, currentTitle: string): void {
+    // TODO: Implement rename functionality
+    console.log("Rename chat:", chatId, currentTitle);
+  }
+
+  private handleDuplicateChat(chatId: string): void {
+    // TODO: Implement duplicate functionality
+    console.log("Duplicate chat:", chatId);
+  }
+
+  private handleDeleteChat(chatId: string, title: string): void {
+    // TODO: Show confirmation modal and then delete
+    console.log("Delete chat:", chatId, title);
   }
 
   private setupChatBubbleListeners(): void {
