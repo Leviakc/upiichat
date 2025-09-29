@@ -476,6 +476,7 @@ hidden {
   padding: 0.5rem 1rem;
   border: 1px solid var(--color-border);
   background: transparent;
+  border: 1px solid var(--color-border-primary);
   color: var(--color-text-secondary);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -536,6 +537,150 @@ hidden {
 
   .delete-confirmation-modal .cancel-btn,
   .delete-confirmation-modal .delete-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+}
+
+/* Rename Chat Modal Styles */
+.rename-chat-modal {
+  padding: 1.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.rename-chat-modal .modal-header {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.rename-chat-modal .modal-header h2 {
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.rename-chat-modal .modal-content {
+  margin-bottom: 1.5rem;
+}
+
+.rename-chat-modal .modal-content p {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+}
+
+.rename-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat-title-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--color-background-light);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.chat-title-input:focus {
+  outline: none;
+  border-color: var(--color-link-primary);
+  box-shadow: 0 0 0 2px rgba(168, 199, 250, 0.2);
+}
+
+.char-counter {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.rename-chat-modal .modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.rename-chat-modal .cancel-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border-primary);
+  background: transparent;
+  color: var(--color-text-secondary);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+}
+
+.rename-chat-modal .cancel-btn:hover {
+  background: var(--color-accent-hover);
+  color: var(--color-text-primary);
+}
+
+.rename-chat-modal .save-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-link-primary);
+  background: var(--color-link-primary);
+  color: var(--color-background-dark);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.rename-chat-modal .save-btn:hover:not(:disabled) {
+  background: var(--color-link-secondary);
+  border-color: var(--color-link-secondary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(168, 199, 250, 0.3);
+}
+
+.rename-chat-modal .save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Mobile responsive adjustments for rename modal */
+@media (max-width: 640px) {
+  .rename-chat-modal {
+    padding: 1rem;
+    max-width: none;
+    max-height: 70vh;
+    margin: 1rem auto;
+  }
+
+  .rename-chat-modal .modal-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .rename-chat-modal .modal-content p {
+    font-size: 0.875rem;
+  }
+
+  .chat-title-input {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .rename-chat-modal .modal-actions {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .rename-chat-modal .cancel-btn,
+  .rename-chat-modal .save-btn {
     width: 100%;
     justify-content: center;
     padding: 0.75rem 1rem;

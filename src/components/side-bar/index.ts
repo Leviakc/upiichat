@@ -325,8 +325,114 @@ class Sidebar extends BaseComponent {
   }
 
   private handleRenameChat(chatId: string, currentTitle: string): void {
-    // TODO: Implement rename functionality
-    console.log("Rename chat:", chatId, currentTitle);
+    const $renameChatTemplate = this.getTemplate("#rename-chat-modal-template");
+    if (!$renameChatTemplate) return;
+
+    document.body.appendChild($renameChatTemplate);
+
+    const modalWindow = this.closest("body")?.querySelector(
+      "modal-window:not([for])",
+    );
+    if (!modalWindow) return;
+
+    modalWindow.setAttribute("for", `rename-chat-${chatId}`);
+    modalWindow.setAttribute("open", "");
+
+    const titleInput = modalWindow.querySelector(
+      "#chatTitleInput",
+    ) as HTMLInputElement;
+    const charCount = modalWindow.querySelector("#charCount") as HTMLElement;
+    const confirmBtn = modalWindow.querySelector(
+      "#confirmRename",
+    ) as HTMLButtonElement;
+    const cancelBtn = modalWindow.querySelector(
+      ".cancel-btn",
+    ) as HTMLButtonElement;
+    const form = modalWindow.querySelector(".rename-form") as HTMLFormElement;
+
+    if (!titleInput || !charCount || !confirmBtn || !form) return;
+
+    // Pre-fill the input with current title
+    titleInput.value = currentTitle;
+    titleInput.focus();
+    titleInput.select(); // Select all text for easy editing
+
+    // Update character counter
+    const updateCharCounter = () => {
+      const count = titleInput.value.length;
+      charCount.textContent = count.toString();
+      charCount.style.color =
+        count > 90 ? "var(--color-error)" : "var(--color-text-secondary)";
+      confirmBtn.disabled =
+        count === 0 ||
+        count > 80 ||
+        titleInput.value.trim() === currentTitle.trim();
+    };
+
+    updateCharCounter();
+
+    // Handle input changes
+    titleInput.addEventListener("input", updateCharCounter);
+
+    // Handle form submission (Enter key or Save button)
+    const handleSave = (e: Event) => {
+      e.preventDefault();
+      const newTitle = titleInput.value.trim();
+
+      if (
+        !newTitle ||
+        newTitle === currentTitle.trim() ||
+        newTitle.length > 80
+      ) {
+        return;
+      }
+
+      // Update the chat title using storage service
+      const success = storageService.updateChatTitle(chatId, newTitle);
+
+      if (success) {
+        // Refresh the chat list to show the new title
+        this.loadChatList();
+
+        // Remove the modal after a brief delay for smooth animation
+        setTimeout(() => {
+          if (modalWindow.parentElement === document.body) {
+            document.body.removeChild(modalWindow);
+          }
+        }, 300);
+
+        // Dispatch success event (optional - for future notifications)
+        document.dispatchEvent(
+          new CustomEvent("chat-renamed", {
+            detail: { chatId, oldTitle: currentTitle, newTitle },
+          }),
+        );
+      } else {
+        console.error("Failed to rename chat");
+        // You could show an error message here
+      }
+    };
+
+    // Event listeners
+    form.addEventListener("submit", handleSave);
+    confirmBtn.addEventListener("click", handleSave);
+
+    // Handle cancel
+    cancelBtn?.addEventListener("click", () => {
+      setTimeout(() => {
+        if (modalWindow.parentElement === document.body) {
+          document.body.removeChild(modalWindow);
+        }
+      }, 300);
+    });
+
+    // Handle Enter key specifically
+    titleInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSave(e);
+      }
+    });
   }
 
   private handleDuplicateChat(chatId: string): void {
