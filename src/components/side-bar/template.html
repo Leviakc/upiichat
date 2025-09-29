@@ -260,3 +260,59 @@
     </div>
   </li>
 </template>
+
+<template class="hidden" id="delete-chat-modal-template">
+  <modal-window>
+    <div class="delete-confirmation-modal">
+      <div class="modal-header">
+        <h2>🗑️ Eliminar Chat</h2>
+      </div>
+
+      <div class="modal-content">
+        <p>¿Estás seguro de que quieres eliminar este chat?</p>
+        <p class="warning-text">Esta acción no se puede deshacer.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" slot="close-button">Cancelar</button>
+        <button class="delete-btn danger" id="confirmDelete">
+          Eliminar Chat
+        </button>
+      </div>
+    </div>
+  </modal-window>
+</template>
+
+<template class="hidden" id="rename-chat-modal-template">
+  <modal-window>
+    <div class="rename-chat-modal">
+      <div class="modal-header">
+        <h2>✏️ Renombrar Chat</h2>
+      </div>
+
+      <div class="modal-content">
+        <p>Ingresa un nuevo nombre para este chat:</p>
+        <form class="rename-form">
+          <input
+            type="text"
+            id="chatTitleInput"
+            class="chat-title-input"
+            placeholder="Nombre del chat..."
+            maxlength="80"
+            required
+          />
+          <div class="char-counter"><span id="charCount">0</span>/80</div>
+        </form>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" slot="close-button" type="button">
+          Cancelar
+        </button>
+        <button class="save-btn" id="confirmRename" type="submit">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+  </modal-window>
+</template>

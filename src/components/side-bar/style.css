@@ -172,6 +172,51 @@
   opacity: 0.7;
 }
 
+.chat-actions-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--transition-fast);
+  color: var(--color-text-secondary);
+}
+
+.chat-bubble:hover .chat-actions-btn,
+.chat-actions-btn:focus-visible {
+  opacity: 1;
+}
+
+.chat-actions-btn:hover {
+  background-color: var(--color-accent-hover);
+  color: var(--color-text-primary);
+}
+
+.chat-actions-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Mobile adjustments for action menu */
+@media (max-width: 768px) {
+  /* Hide three-dot button on mobile - rely on long-press */
+  .chat-actions-btn {
+    display: none;
+  }
+
+  /* Ensure long-press target has good touch area */
+  .chat-bubble {
+    touch-action: manipulation;
+    user-select: none;
+  }
+}
+
 /* Sidebar text (hidden when collapsed) */
 .sidebar-text,
 .chat-content {
@@ -184,7 +229,8 @@
 
 /* Hide content when collapsed - applies to both modes */
 :host(.collapsed) .sidebar-text,
-:host(.collapsed) .chat-content {
+:host(.collapsed) .chat-content,
+:host(.collapsed) .chat-actions-btn {
   opacity: 0;
   pointer-events: none;
   transform: translateX(-10px);
