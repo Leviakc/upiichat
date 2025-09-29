@@ -14,8 +14,9 @@ technologías web.
 
 ### **Mejoras de UI/UX**
 
-- [ ] Implementar menú de tres puntos para editar/eliminar chats (con long-press en móvil)
+- [x] Implementar menú de tres puntos para editar/eliminar chats (con long-press en móvil)
 - [ ] Crear componente toast para notificaciones breves
+- [ ] Implementar un buscador de preguntas si el bot puede no saber la respuesta y puede existir
 - [ ] Crear componente tooltip para sugerencias de UI
 - [ ] Implementar UUID fallback si no está disponible `crypto.randomUUID()`
 - [ ] Mejorar accesibilidad de modal:
