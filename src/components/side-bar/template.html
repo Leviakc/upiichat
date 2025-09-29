@@ -260,3 +260,25 @@
     </div>
   </li>
 </template>
+
+<template class="hidden" id="delete-chat-modal-template">
+  <modal-window>
+    <div class="delete-confirmation-modal">
+      <div class="modal-header">
+        <h2>🗑️ Eliminar Chat</h2>
+      </div>
+
+      <div class="modal-content">
+        <p>¿Estás seguro de que quieres eliminar este chat?</p>
+        <p class="warning-text">Esta acción no se puede deshacer.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="cancel-btn" slot="close-button">Cancelar</button>
+        <button class="delete-btn danger" id="confirmDelete">
+          Eliminar Chat
+        </button>
+      </div>
+    </modal-window>
+  </modal-window>
+</template>

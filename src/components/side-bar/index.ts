@@ -36,6 +36,11 @@ class Sidebar extends BaseComponent {
       this.loadChatList();
     });
 
+    // Listen for chat deletion
+    document.addEventListener("chat-deleted", () => {
+      this.loadChatList();
+    });
+
     // Listen for route changes to update active chat highlight
     document.addEventListener("route-changed", (e) => {
       const { route } = (e as CustomEvent).detail as { route: string };
@@ -86,10 +91,30 @@ class Sidebar extends BaseComponent {
       }
     });
 
+    // This is for closing any open modal when pressing esc
+    document.addEventListener("keyup", (e) => {
+      if (e.key !== "Escape") return;
+      const modalWindow =
+        this.closest("body")?.querySelector("modal-window[open]");
+      if (modalWindow) {
+        document.body.removeChild(modalWindow);
+      }
+    });
     // Close mobile sidebar when clicking backdrop
     document.addEventListener("click", (e) => {
       const container = document.querySelector("chat-container");
       const target = e.target as HTMLElement;
+      // This is for closing any open modal when clicking outside
+      const modalWindow = target.closest("modal-window[open]");
+      if (modalWindow) {
+        let shadowRootElement = null;
+        shadowRootElement = e
+          .composedPath()
+          .filter((el) => el instanceof ShadowRoot);
+        if (shadowRootElement.length === 0) {
+          document.body.removeChild(modalWindow);
+        }
+      }
 
       // Check if mobile sidebar is open and click is on backdrop (not on sidebar or header)
       if (
@@ -159,16 +184,10 @@ class Sidebar extends BaseComponent {
         container.classList.remove("mobile-sidebar-open");
         this.classList.add("collapsed");
         this.isCollapsed = true;
-        // document
-        //   .querySelector("chat-container")
-        //   ?.classList.remove("mobile-sidebar-open");
-        // console.log("close mobile sidebar");
       } else {
         // Open the sidebar - add overlay and expand content
         container.classList.add("mobile-sidebar-open");
-        // console.log("close mobile sidebar");
         this.classList.remove("collapsed");
-        // document.querySelector('chat-container')?.classList.remove('mobile-sidebar-open');
 
         this.isCollapsed = false;
       }
@@ -176,9 +195,6 @@ class Sidebar extends BaseComponent {
   }
 
   private createNewChat(): void {
-    // Create new chat and navigate to it
-    // const chat = storageService.createChat();
-    // this.router.goToRoute(`/chat/${chat.id}`);
     this.router.goToRoute("/");
 
     // Close mobile sidebar if open
@@ -197,20 +213,6 @@ class Sidebar extends BaseComponent {
 
     // Clear existing chats
     this.$chatList.innerHTML = "";
-
-    // Add test chat for action menu demo (temporary)
-    if (chats.length === 0) {
-      const testChat: ChatDisplayItem = {
-        id: "test-chat-1",
-        title: "Como registrar materias?",
-        preview: "Hola, necesito ayuda con el registro...",
-        timeDisplay: "2h ago",
-        isActive: false,
-        messageCount: 5,
-        isEditable: true,
-      };
-      chats.push(testChat);
-    }
 
     // Add each chat
     chats.forEach((chat) => {
@@ -282,7 +284,6 @@ class Sidebar extends BaseComponent {
 
     // Create action menu instance
     const actionMenu = new ActionMenu();
-
     // Define menu items
     const menuItems: MenuItemConfig[] = [
       {
@@ -314,14 +315,12 @@ class Sidebar extends BaseComponent {
           <line x1="10" y1="11" x2="10" y2="17"/>
           <line x1="14" y1="11" x2="14" y2="17"/>
         </svg>`,
-        action: () => this.handleDeleteChat(chat.id, chat.title),
+        action: () => this.handleDeleteChat(chat.id, "delete"),
       },
     ];
 
-    // Setup desktop click trigger
     actionMenu.setupTrigger(actionBtn, menuItems);
 
-    // Setup mobile long-press trigger
     actionMenu.setupTrigger(chatContent, menuItems, { longPress: true });
   }
 
@@ -335,9 +334,42 @@ class Sidebar extends BaseComponent {
     console.log("Duplicate chat:", chatId);
   }
 
-  private handleDeleteChat(chatId: string, title: string): void {
-    // TODO: Show confirmation modal and then delete
-    console.log("Delete chat:", chatId, title);
+  private handleDeleteChat(chatId: string, label: string): void {
+    const $deleteChatTemplate = this.getTemplate("#delete-chat-modal-template");
+    if (!$deleteChatTemplate) return;
+    const actionMenu = this.closest("body")?.querySelector("action-menu");
+
+    if (!actionMenu) return;
+    document.body.appendChild($deleteChatTemplate);
+    const modalWindow = this.closest("body")?.querySelector(
+      "modal-window:not([for])",
+    );
+    if (!modalWindow) return;
+    modalWindow.setAttribute("for", `open${label}MenuModal`);
+    modalWindow.setAttribute("open", "");
+
+    const confirmBtn = modalWindow.querySelector("#confirmDelete");
+    const cancelBtn = modalWindow.querySelector(".cancel-btn");
+    cancelBtn?.addEventListener("click", () => {
+      modalWindow?.removeAttribute("open");
+      document.body.removeChild(modalWindow);
+    });
+
+    confirmBtn?.addEventListener("click", () => {
+      const success = storageService.deleteChat(chatId);
+
+      if (success) {
+        modalWindow.removeAttribute("open");
+        setTimeout(() => {
+          document.body.removeChild(modalWindow);
+        }, 300);
+
+        this.loadChatList();
+        Router.goToRoute("/");
+      } else {
+        console.error("Failed to delete chat:", chatId);
+      }
+    });
   }
 
   private setupChatBubbleListeners(): void {
@@ -383,7 +415,6 @@ class Sidebar extends BaseComponent {
       bubble.classList.remove("active");
     });
 
-    // Add active class if we're on a chat route
     if (Router.isOnChatRoute()) {
       const chatId = Router.getCurrentChatId();
       if (chatId) {
@@ -435,13 +466,6 @@ class Sidebar extends BaseComponent {
     if (this.hoverCooldownTimeout) {
       clearTimeout(this.hoverCooldownTimeout);
     }
-
-    // Wait a bit, then re-enable hover
-    // this.hoverCooldownTimeout = window.setTimeout(() => {
-    //   this.isManuallyCollapsed = false;
-    //   this.classList.remove("manually-collapsed");
-    //   this.hoverCooldownTimeout = null;
-    // }, 500); // 500ms cooldown before hover works again
   }
 
   private checkMobile(): boolean {
@@ -492,13 +516,23 @@ class Sidebar extends BaseComponent {
     });
   }
 
+  private getTemplate(templateId: string): DocumentFragment | undefined {
+    if (this.shadowRoot === null) return;
+    const $template =
+      this.shadowRoot.querySelector<HTMLTemplateElement>(templateId);
+
+    if (!$template) {
+      return;
+    }
+
+    return $template.content.cloneNode(true) as DocumentFragment;
+  }
+
   protected override disconnectedCallback(): void {
-    // Clean up timeout when component is removed
     if (this.hoverCooldownTimeout) {
       clearTimeout(this.hoverCooldownTimeout);
     }
 
-    // Clean up resize listener
     window.removeEventListener("resize", this.setupModeHandling);
 
     super.disconnectedCallback();

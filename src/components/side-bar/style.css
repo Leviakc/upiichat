@@ -209,7 +209,7 @@
   .chat-actions-btn {
     display: none;
   }
-  
+
   /* Ensure long-press target has good touch area */
   .chat-bubble {
     touch-action: manipulation;

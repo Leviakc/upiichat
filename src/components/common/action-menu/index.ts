@@ -91,6 +91,9 @@ export class ActionMenu extends BaseComponent {
       menuItemElement.setAttribute("data-variant", item.variant);
     }
 
+    const id = `open${item.id}MenuModal`;
+    menuItemElement.id = id;
+
     // Set icon
     if (item.icon) {
       const iconElement = menuItem.querySelector(
