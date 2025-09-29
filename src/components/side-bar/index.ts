@@ -41,6 +41,12 @@ class Sidebar extends BaseComponent {
       this.loadChatList();
     });
 
+    // Listen for chat duplication
+    document.addEventListener("chat-duplicated", () => {
+      this.loadChatList();
+      // The storage service already handles navigation in handleDuplicateChat
+    });
+
     // Listen for route changes to update active chat highlight
     document.addEventListener("route-changed", (e) => {
       const { route } = (e as CustomEvent).detail as { route: string };
@@ -436,8 +442,28 @@ class Sidebar extends BaseComponent {
   }
 
   private handleDuplicateChat(chatId: string): void {
-    // TODO: Implement duplicate functionality
-    console.log("Duplicate chat:", chatId);
+    const duplicatedChat = storageService.duplicateChat(chatId);
+
+    if (!duplicatedChat) {
+      console.error("Failed to duplicate chat:", chatId);
+      return;
+    }
+
+    this.loadChatList();
+
+    Router.goToRoute(`/chat/${duplicatedChat.id}`);
+
+    // TODO: Show a success toast/notification
+
+    document.dispatchEvent(
+      new CustomEvent("chat-duplicated-ui", {
+        detail: {
+          originalChatId: chatId,
+          newChatId: duplicatedChat.id,
+          newTitle: duplicatedChat.title,
+        },
+      }),
+    );
   }
 
   private handleDeleteChat(chatId: string, label: string): void {
