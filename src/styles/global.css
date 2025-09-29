@@ -49,11 +49,7 @@ chat-container {
   -webkit-user-select: none;
 }
 
-/* Mobile layout - full width chat, sidebar as overlay */
-chat-container.mobile-layout {
-  grid-template-columns: 1fr;
-  position: relative;
-}
+/* /* Mobile layout - full width chat, sidebar as overlay */
 
 /* Mobile backdrop when sidebar is expanded */
 chat-container.mobile-layout::before {
@@ -144,7 +140,6 @@ hidden {
 @media (700px >= width) {
   chat-container {
     grid-template-columns: 1fr;
-    position: relative; /* For sidebar overlay positioning */
   }
 
   side-bar {
