@@ -3,6 +3,7 @@ import template from "./template.html?raw";
 import style from "./style.css?inline";
 import { Router } from "@/services/router";
 import { storageService } from "@/services/store";
+import { toastService } from "@/services/toast-service";
 import type { ChatDisplayItem } from "@/types/chat";
 import { ActionMenu, type MenuItemConfig } from "../common/action-menu";
 
@@ -407,7 +408,13 @@ class Sidebar extends BaseComponent {
           }
         }, 300);
 
-        // Dispatch success event (optional - for future notifications)
+        // Show success toast
+        toastService.success(
+          'Chat renombrado',
+          `"${currentTitle}" ahora se llama "${newTitle}"`
+        );
+
+        // Dispatch success event
         document.dispatchEvent(
           new CustomEvent("chat-renamed", {
             detail: { chatId, oldTitle: currentTitle, newTitle },
@@ -415,7 +422,10 @@ class Sidebar extends BaseComponent {
         );
       } else {
         console.error("Failed to rename chat");
-        // You could show an error message here
+        toastService.error(
+          'Error al renombrar',
+          'No se pudo cambiar el nombre del chat. Inténtalo de nuevo.'
+        );
       }
     };
 
@@ -446,6 +456,10 @@ class Sidebar extends BaseComponent {
 
     if (!duplicatedChat) {
       console.error("Failed to duplicate chat:", chatId);
+      toastService.error(
+        'Error al duplicar',
+        'No se pudo crear una copia del chat. Inténtalo de nuevo.'
+      );
       return;
     }
 
@@ -453,7 +467,11 @@ class Sidebar extends BaseComponent {
 
     Router.goToRoute(`/chat/${duplicatedChat.id}`);
 
-    // TODO: Show a success toast/notification
+    // Show success toast
+    toastService.success(
+      'Chat duplicado',
+      `Se creó una copia: "${duplicatedChat.title}"`
+    );
 
     document.dispatchEvent(
       new CustomEvent("chat-duplicated-ui", {
@@ -498,8 +516,18 @@ class Sidebar extends BaseComponent {
 
         this.loadChatList();
         Router.goToRoute("/");
+        
+        // Show success toast
+        toastService.success(
+          'Chat eliminado',
+          'El chat se eliminó correctamente.'
+        );
       } else {
         console.error("Failed to delete chat:", chatId);
+        toastService.error(
+          'Error al eliminar',
+          'No se pudo eliminar el chat. Inténtalo de nuevo.'
+        );
       }
     });
   }
