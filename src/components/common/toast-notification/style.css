@@ -6,7 +6,7 @@
   z-index: 1002; /* Above modals */
   pointer-events: none; /* Keep this always none */
   transform: translateX(100%);
-  transition: transform var(--transition-medium) var(--ease-out);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 :host([visible]) {
@@ -15,10 +15,10 @@
 }
 
 .toast-container {
-  background: var(--color-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-lg);
+  background: var(--color-background-medium, #111827);
+  border: 1px solid var(--color-border-primary, #374151);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -26,7 +26,7 @@
   max-width: 400px;
   min-width: 300px;
   pointer-events: auto; /* Only the container can be clicked */
-  animation: slideIn 0.3s var(--ease-out);
+  animation: slideIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 :host([variant="success"]) .toast-container {
@@ -81,13 +81,13 @@
 .toast-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-text-primary, #e6edf3);
   line-height: 1.3;
 }
 
 .toast-message {
   font-size: 0.8rem;
-  color: var(--color-text-secondary);
+  color: var(--color-text-secondary, #9c9d9d);
   line-height: 1.4;
 }
 
@@ -97,26 +97,26 @@
   height: 24px;
   border: none;
   background: transparent;
-  color: var(--color-text-muted);
+  color: var(--color-text-muted, #6b7280);
   cursor: pointer;
-  border-radius: var(--border-radius-sm);
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.15s ease;
   margin-top: -2px;
   margin-right: -4px;
 }
 
 .toast-close:hover {
-  background: var(--color-accent-hover);
-  color: var(--color-text-secondary);
+  background: var(--color-background-light, #1e293b);
+  color: var(--color-text-secondary, #9c9d9d);
 }
 
 .toast-close:focus {
   outline: none;
-  background: var(--color-accent-hover);
-  color: var(--color-text-secondary);
+  background: var(--color-background-light, #1e293b);
+  color: var(--color-text-secondary, #9c9d9d);
 }
 
 /* Animations */
@@ -132,7 +132,7 @@
 }
 
 :host([hiding]) .toast-container {
-  animation: slideOut 0.3s var(--ease-in) forwards;
+  animation: slideOut 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
 @keyframes slideOut {
@@ -154,7 +154,7 @@
   height: 2px;
   background: currentColor;
   opacity: 0.3;
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  border-radius: 0 0 12px 12px;
   transform-origin: left;
   animation: progress linear;
 }

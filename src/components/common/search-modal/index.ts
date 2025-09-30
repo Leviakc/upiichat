@@ -296,6 +296,19 @@ export class SearchModal extends BaseComponent {
     // Clear search when closing
     setTimeout(() => {
       this.clearSearch();
+      
+      // Dispatch close event
+      this.dispatchEvent(new CustomEvent('search-modal-closed', {
+        bubbles: true,
+        composed: true
+      }));
+      
+      // Remove from DOM after animation
+      setTimeout(() => {
+        if (this.parentNode) {
+          this.parentNode.removeChild(this);
+        }
+      }, 100);
     }, 300);
   }
 
