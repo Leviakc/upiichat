@@ -14,9 +14,6 @@ technologías web.
 
 ### **Mejoras de UI/UX**
 
-- [x] Implementar menú de tres puntos para editar/eliminar chats (con long-press en móvil)
-- [ ] Crear componente toast para notificaciones breves
-- [ ] Implementar un buscador de preguntas si el bot puede no saber la respuesta y puede existir
 - [ ] Crear componente tooltip para sugerencias de UI
 - [ ] Implementar UUID fallback si no está disponible `crypto.randomUUID()`
 - [ ] Mejorar accesibilidad de modal:
@@ -29,7 +26,6 @@ technologías web.
 
 ### **Futuras Funcionalidades y Características Avanzadas**
 
-- [x] Agregar opción de "Más herramientas" para mostrar herramientas adicionales que pueden ser útiles para los estudiantes como [saes fill-form](https://chromewbstore.google.com/detail/saes%20fill-form/hlgobbbmkdngojnbhcfhnghjlpnkfelb)
 - [ ] Sistema de feedback con Google Sheets como backend
 - [ ] Funcionalidad de búsqueda en historial de chats
 - [ ] Integrar WebLLM con RAG (_Retrieval-Augmented Generation_) para dispositivos potentes
@@ -42,6 +38,7 @@ technologías web.
 - [x] Implementar un _Web Worker_ para gestionar la carga en segundo plano de estrategias secundarias (como Pyodide)
 - [x] Crear un script de pre-cómputo para generar los _embeddings_ sin conexión
 - [x] Configurar un _Service Worker_ para almacenar en caché activos grandes (modelos de IA, Pyodide)
+- [x] Agregar opción de "Más herramientas" para mostrar herramientas adicionales que pueden ser útiles para los estudiantes como [saes fill-form](https://chromewbstore.google.com/detail/saes%20fill-form/hlgobbbmkdngojnbhcfhnghjlpnkfelb)
 
 ### **Mejoras de UI/UX**
 
@@ -52,6 +49,9 @@ technologías web.
 - [x] Add vercel json to redirect everything to the SPA
 - [x] Implementar un historial de chat persistente usando `localStorage`
 - [x] Crear un componente modal para mostrar información adicional o configuraciones
+- [x] Implementar menú de tres puntos para editar/eliminar chats (con long-press en móvil)
+- [x] Crear componente toast para notificaciones breves
+- [x] Implementar un buscador de preguntas si el bot puede no saber la respuesta y puede existir
 
 ### **Arquitectura y Despliegue**
 
