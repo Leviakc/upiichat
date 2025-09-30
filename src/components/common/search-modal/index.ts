@@ -107,20 +107,30 @@ export class SearchModal extends BaseComponent {
   }
 
   private handleSearch(): void {
-    const query = this.searchInput.value.trim().toLowerCase();
+    const query = this.normalizeText(this.searchInput.value.trim());
 
     if (!query) {
       this.filteredResults = [];
     } else {
       this.filteredResults = this.datasetItems.filter(
         (item) =>
-          item.question.toLowerCase().includes(query) ||
-          item.answer.toLowerCase().includes(query),
+          this.normalizeText(item.question).includes(query) ||
+          this.normalizeText(item.answer).includes(query),
       );
     }
 
     this.updateResults();
     this.updateClearButton();
+  }
+
+  private normalizeText(text: string): string {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics/accents
+      .replace(/[^\w\s]/g, ' ') // Replace special characters with spaces
+      .replace(/\s+/g, ' ') // Normalize multiple spaces
+      .trim();
   }
 
   private handleKeyDown(e: KeyboardEvent): void {
