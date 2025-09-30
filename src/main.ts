@@ -7,6 +7,7 @@ import "@/components/chat-messages";
 import "@/components/chat-header";
 import "@/components/common/modal-window";
 import "@/components/common/action-menu";
+import "@/components/common/search-modal";
 import { storageService } from "@/services/store";
 
 // TODO: fix service worker error
