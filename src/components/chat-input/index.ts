@@ -1,13 +1,10 @@
 import { BaseComponent } from "../core/base-component";
-import { SearchModal } from "../common/search-modal";
 import template from "./template.html?raw";
 import style from "./style.css?inline";
 
 class ChatInput extends BaseComponent {
   private $inputElement: HTMLTextAreaElement | null = null;
   private $sendButton: HTMLButtonElement | null = null;
-  private $searchButton: HTMLButtonElement | null = null;
-  private searchModal: SearchModal | null = null;
   private isSending = false;
 
   constructor() {
@@ -31,14 +28,10 @@ class ChatInput extends BaseComponent {
     }
     this.$inputElement = this.shadowRoot?.querySelector("textarea");
     this.$sendButton = this.shadowRoot?.querySelector(".send-button");
-    this.$searchButton = this.shadowRoot?.querySelector(".search-button");
 
     // TODO: Check why this validation is not working
     // if (!this.inputElement && !this.sendButton) return;
-    if (!this.$inputElement || !this.$sendButton || !this.$searchButton) return;
-
-    // Initialize search modal
-    this.initializeSearchModal();
+    if (!this.$inputElement || !this.$sendButton) return;
 
     // Start in a disabled state
     this.disableInput("Iniciando...");
@@ -65,10 +58,6 @@ class ChatInput extends BaseComponent {
       if (this.$inputElement?.value.trim() === "") return;
       this.$sendButton?.blur(); // this will remove focus from the button
       this.sendMessage();
-    });
-
-    this.$searchButton.addEventListener("click", () => {
-      this.openSearchModal();
     });
 
     this.$inputElement.addEventListener("keydown", (event) => {
@@ -132,18 +121,6 @@ class ChatInput extends BaseComponent {
     this.$inputElement.value = "";
     this.$sendButton.disabled = true;
     this.$inputElement.placeholder = placeholder;
-  }
-
-  private initializeSearchModal(): void {
-    this.searchModal = new SearchModal();
-    document.body.appendChild(this.searchModal);
-  }
-
-  private openSearchModal(): void {
-    if (!this.searchModal) {
-      this.initializeSearchModal();
-    }
-    this.searchModal?.open();
   }
 }
 

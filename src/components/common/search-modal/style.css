@@ -1,12 +1,17 @@
 /* Search Modal Host Styles */
 :host {
+  display: none; /* Initially hidden like modal-window */
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  pointer-events: none;
   z-index: 1001; /* Above sidebar and action menu */
+}
+
+:host([open]) {
+  display: flex; /* Display when open attribute is present */
+  animation: backdropFadeIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .search-modal-backdrop {
@@ -18,41 +23,23 @@
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--transition-medium);
-}
-
-:host([open]) .search-modal-backdrop {
-  pointer-events: auto;
-  opacity: 1;
 }
 
 .search-modal {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  background: var(--color-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
+  transform: translate(-50%, -50%);
+  background: var(--color-background-medium, #111827);
+  border: 1px solid var(--color-border-primary, #374151);
+  border-radius: 12px;
   width: 90vw;
   max-width: 600px;
   max-height: 80vh;
-  box-shadow: var(--shadow-lg);
-  pointer-events: auto;
-  opacity: 0;
-  transition: 
-    transform var(--transition-medium) var(--ease-out),
-    opacity var(--transition-medium) var(--ease-out);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-
-:host([open]) .search-modal {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
 }
 
 .search-modal-header {
@@ -241,6 +228,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 

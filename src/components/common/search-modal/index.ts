@@ -1,6 +1,6 @@
-import { BaseComponent } from "@/components/core/base-component";
-import template from "./template.html?raw";
-import style from "./style.css?inline";
+import { BaseComponent } from '../../core/base-component';
+import template from './template.html?raw';
+import style from './style.css?inline';
 
 interface SearchResult {
   id: string;
@@ -17,17 +17,49 @@ export class SearchModal extends BaseComponent {
   private searchPlaceholder!: HTMLElement;
   private closeButton!: HTMLElement;
   private backdrop!: HTMLElement;
+  private triggerElement: HTMLElement | null = null;
+  private $parentElement: HTMLElement | null = null;
+  private boundOpenHandler: () => void = this.open.bind(this);
+  private boundCloseHandler: () => void = this.close.bind(this);
+  private boundEscapeHandler: (e: KeyboardEvent) => void = this.handleEscape.bind(this);
 
   constructor() {
     super();
+    this.$parentElement = this.parentElement;
     this.loadDataset();
   }
 
   protected override connectedCallback(): void {
     super.connectedCallback();
+    
+    if (this.parentNode !== document.body) {
+      document.body.appendChild(this);
+    }
+    
     this.initializeElements();
     this.bindEvents();
     this.updateResults();
+  }
+
+  protected override setupEventListeners(): void {
+    if (!this.shadowRoot) return;
+    
+    const triggerId = this.getAttribute("for");
+    if (!triggerId) return;
+    if (!this.$parentElement) return;
+    
+    this.triggerElement = this.$parentElement.querySelector<HTMLElement>(`#${triggerId}`);
+    if (!this.triggerElement) return;
+    
+    this.triggerElement.addEventListener("click", this.boundOpenHandler);
+    document.addEventListener("keydown", this.boundEscapeHandler);
+  }
+
+  protected override disconnectedCallback(): void {
+    if (this.triggerElement) {
+      this.triggerElement.removeEventListener("click", this.boundOpenHandler);
+    }
+    document.removeEventListener("keydown", this.boundEscapeHandler);
   }
 
   private initializeElements(): void {
@@ -60,20 +92,19 @@ export class SearchModal extends BaseComponent {
     this.searchClear.addEventListener("click", () => this.clearSearch());
 
     // Close modal events
-    this.closeButton.addEventListener("click", () => this.close());
-    this.backdrop.addEventListener("click", () => this.close());
-
-    // Escape key to close
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && this.hasAttribute("open")) {
-        this.close();
-      }
-    });
+    this.closeButton.addEventListener("click", this.boundCloseHandler);
+    this.backdrop.addEventListener("click", this.boundCloseHandler);
 
     // Result item clicks (event delegation)
     this.resultsContainer.addEventListener("click", (e) =>
       this.handleResultClick(e),
     );
+  }
+
+  private handleEscape(e: KeyboardEvent): void {
+    if (e.key === "Escape" && this.hasAttribute("open")) {
+      this.close();
+    }
   }
 
   private async loadDataset(): Promise<void> {
@@ -296,20 +327,12 @@ export class SearchModal extends BaseComponent {
     // Clear search when closing
     setTimeout(() => {
       this.clearSearch();
-      
-      // Dispatch close event
-      this.dispatchEvent(new CustomEvent('search-modal-closed', {
-        bubbles: true,
-        composed: true
-      }));
-      
-      // Remove from DOM after animation
-      setTimeout(() => {
-        if (this.parentNode) {
-          this.parentNode.removeChild(this);
-        }
-      }, 100);
     }, 300);
+
+    // Dispatch close event like modal-window
+    this.dispatchEvent(
+      new CustomEvent("closed", { bubbles: true, composed: true })
+    );
   }
 
   protected override get htmlTemplate(): string {
