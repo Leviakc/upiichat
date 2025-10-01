@@ -27,7 +27,6 @@ technologías web.
 ### **Futuras Funcionalidades y Características Avanzadas**
 
 - [ ] Sistema de feedback con Google Sheets como backend
-- [ ] Funcionalidad de búsqueda en historial de chats
 - [ ] Integrar WebLLM con RAG (_Retrieval-Augmented Generation_) para dispositivos potentes
 
 ## **✅ Funcionalidades Completadas**
@@ -39,6 +38,7 @@ technologías web.
 - [x] Crear un script de pre-cómputo para generar los _embeddings_ sin conexión
 - [x] Configurar un _Service Worker_ para almacenar en caché activos grandes (modelos de IA, Pyodide)
 - [x] Agregar opción de "Más herramientas" para mostrar herramientas adicionales que pueden ser útiles para los estudiantes como [saes fill-form](https://chromewbstore.google.com/detail/saes%20fill-form/hlgobbbmkdngojnbhcfhnghjlpnkfelb)
+- [x] Funcionalidad de búsqueda en historial de chats
 
 ### **Mejoras de UI/UX**
 
