@@ -18,6 +18,7 @@ export class StorageService {
     activeChatId: null,
     theme: "dark",
     lastSyncTime: Date.now(),
+    tutorialCompleted: false,
   };
 
   private defaultData: StorageData = {
@@ -282,7 +283,7 @@ export class StorageService {
     if (!originalChat) return null;
 
     const now = Date.now();
-    
+
     // Create a deep copy of the original chat
     const duplicatedChat: Chat = {
       id: crypto.randomUUID(), // New unique ID
@@ -292,11 +293,11 @@ export class StorageService {
       createdAt: now,
       isActive: true, // Make the new chat active
       isEditable: true,
-      messages: originalChat.messages.map(msg => ({
+      messages: originalChat.messages.map((msg) => ({
         ...msg,
         id: crypto.randomUUID(), // New IDs for messages too
-        timestamp: msg.timestamp // Keep original message timestamps
-      }))
+        timestamp: msg.timestamp, // Keep original message timestamps
+      })),
     };
 
     // Mark all other chats as inactive
@@ -309,11 +310,17 @@ export class StorageService {
     this.saveData();
 
     // Dispatch events for UI updates
-    document.dispatchEvent(new CustomEvent('chat-duplicated', {
-      detail: { originalChatId: chatId, newChatId: duplicatedChat.id, newChat: duplicatedChat }
-    }));
-    
-    document.dispatchEvent(new CustomEvent('storage-updated'));
+    document.dispatchEvent(
+      new CustomEvent("chat-duplicated", {
+        detail: {
+          originalChatId: chatId,
+          newChatId: duplicatedChat.id,
+          newChat: duplicatedChat,
+        },
+      }),
+    );
+
+    document.dispatchEvent(new CustomEvent("storage-updated"));
 
     return duplicatedChat;
   }
