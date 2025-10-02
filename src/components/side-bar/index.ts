@@ -5,7 +5,10 @@ import { Router } from "@/services/router";
 import { storageService } from "@/services/store";
 import { toastService } from "@/services/toast-service";
 import type { ChatDisplayItem } from "@/types/chat";
-import { ActionMenu, type MenuItemConfig } from "../common/action-menu";
+import {
+  ActionMenu,
+  type MenuItemConfig,
+} from "../common/action-menu";
 
 class Sidebar extends BaseComponent {
   private isCollapsed = true; // Start collapsed
@@ -50,7 +53,9 @@ class Sidebar extends BaseComponent {
 
     // Listen for route changes to update active chat highlight
     document.addEventListener("route-changed", (e) => {
-      const { route } = (e as CustomEvent).detail as { route: string };
+      const { route } = (e as CustomEvent).detail as {
+        route: string;
+      };
       this.updateActiveChatHighlight(route);
     });
   }
@@ -68,7 +73,8 @@ class Sidebar extends BaseComponent {
       return;
     }
 
-    this.$toggleButton = this.shadowRoot?.querySelector(".toggle-btn");
+    this.$toggleButton =
+      this.shadowRoot?.querySelector(".toggle-btn");
     this.$chatList = this.shadowRoot?.querySelector(".chat-list");
 
     // Toggle sidebar
@@ -101,8 +107,9 @@ class Sidebar extends BaseComponent {
     // This is for closing any open modal when pressing esc
     document.addEventListener("keyup", (e) => {
       if (e.key !== "Escape") return;
-      const modalWindow =
-        this.closest("body")?.querySelector("modal-window[open]");
+      const modalWindow = this.closest("body")?.querySelector(
+        "modal-window[open]",
+      );
       if (modalWindow) {
         document.body.removeChild(modalWindow);
       }
@@ -137,6 +144,35 @@ class Sidebar extends BaseComponent {
         this.isCollapsed = true;
       }
     });
+
+    // Listen for tour events
+    document.addEventListener("open-sidebar-for-tour", () => {
+      this.openMobileSidebar();
+    });
+
+    document.addEventListener("close-sidebar-for-tour", () => {
+      this.closeMobileSidebar();
+    });
+  }
+
+  public openMobileSidebar(): void {
+    if (!this.isMobile) return;
+    const container = document.querySelector("chat-container");
+    if (container) {
+      container.classList.add("mobile-sidebar-open");
+      this.classList.remove("collapsed");
+      this.isCollapsed = false;
+    }
+  }
+
+  public closeMobileSidebar(): void {
+    if (!this.isMobile) return;
+    const container = document.querySelector("chat-container");
+    if (container) {
+      container.classList.remove("mobile-sidebar-open");
+      this.classList.add("collapsed");
+      this.isCollapsed = true;
+    }
   }
 
   private loadSidebarState(): void {
@@ -328,11 +364,18 @@ class Sidebar extends BaseComponent {
 
     actionMenu.setupTrigger(actionBtn, menuItems);
 
-    actionMenu.setupTrigger(chatContent, menuItems, { longPress: true });
+    actionMenu.setupTrigger(chatContent, menuItems, {
+      longPress: true,
+    });
   }
 
-  private handleRenameChat(chatId: string, currentTitle: string): void {
-    const $renameChatTemplate = this.getTemplate("#rename-chat-modal-template");
+  private handleRenameChat(
+    chatId: string,
+    currentTitle: string,
+  ): void {
+    const $renameChatTemplate = this.getTemplate(
+      "#rename-chat-modal-template",
+    );
     if (!$renameChatTemplate) return;
 
     document.body.appendChild($renameChatTemplate);
@@ -348,14 +391,18 @@ class Sidebar extends BaseComponent {
     const titleInput = modalWindow.querySelector(
       "#chatTitleInput",
     ) as HTMLInputElement;
-    const charCount = modalWindow.querySelector("#charCount") as HTMLElement;
+    const charCount = modalWindow.querySelector(
+      "#charCount",
+    ) as HTMLElement;
     const confirmBtn = modalWindow.querySelector(
       "#confirmRename",
     ) as HTMLButtonElement;
     const cancelBtn = modalWindow.querySelector(
       ".cancel-btn",
     ) as HTMLButtonElement;
-    const form = modalWindow.querySelector(".rename-form") as HTMLFormElement;
+    const form = modalWindow.querySelector(
+      ".rename-form",
+    ) as HTMLFormElement;
 
     if (!titleInput || !charCount || !confirmBtn || !form) return;
 
@@ -369,7 +416,9 @@ class Sidebar extends BaseComponent {
       const count = titleInput.value.length;
       charCount.textContent = count.toString();
       charCount.style.color =
-        count > 90 ? "var(--color-error)" : "var(--color-text-secondary)";
+        count > 90
+          ? "var(--color-error)"
+          : "var(--color-text-secondary)";
       confirmBtn.disabled =
         count === 0 ||
         count > 80 ||
@@ -395,7 +444,10 @@ class Sidebar extends BaseComponent {
       }
 
       // Update the chat title using storage service
-      const success = storageService.updateChatTitle(chatId, newTitle);
+      const success = storageService.updateChatTitle(
+        chatId,
+        newTitle,
+      );
 
       if (success) {
         // Refresh the chat list to show the new title
@@ -410,8 +462,8 @@ class Sidebar extends BaseComponent {
 
         // Show success toast
         toastService.success(
-          'Chat renombrado',
-          `"${currentTitle}" ahora se llama "${newTitle}"`
+          "Chat renombrado",
+          `"${currentTitle}" ahora se llama "${newTitle}"`,
         );
 
         // Dispatch success event
@@ -423,8 +475,8 @@ class Sidebar extends BaseComponent {
       } else {
         console.error("Failed to rename chat");
         toastService.error(
-          'Error al renombrar',
-          'No se pudo cambiar el nombre del chat. Inténtalo de nuevo.'
+          "Error al renombrar",
+          "No se pudo cambiar el nombre del chat. Inténtalo de nuevo.",
         );
       }
     };
@@ -457,8 +509,8 @@ class Sidebar extends BaseComponent {
     if (!duplicatedChat) {
       console.error("Failed to duplicate chat:", chatId);
       toastService.error(
-        'Error al duplicar',
-        'No se pudo crear una copia del chat. Inténtalo de nuevo.'
+        "Error al duplicar",
+        "No se pudo crear una copia del chat. Inténtalo de nuevo.",
       );
       return;
     }
@@ -469,8 +521,8 @@ class Sidebar extends BaseComponent {
 
     // Show success toast
     toastService.success(
-      'Chat duplicado',
-      `Se creó una copia: "${duplicatedChat.title}"`
+      "Chat duplicado",
+      `Se creó una copia: "${duplicatedChat.title}"`,
     );
 
     document.dispatchEvent(
@@ -485,9 +537,12 @@ class Sidebar extends BaseComponent {
   }
 
   private handleDeleteChat(chatId: string, label: string): void {
-    const $deleteChatTemplate = this.getTemplate("#delete-chat-modal-template");
+    const $deleteChatTemplate = this.getTemplate(
+      "#delete-chat-modal-template",
+    );
     if (!$deleteChatTemplate) return;
-    const actionMenu = this.closest("body")?.querySelector("action-menu");
+    const actionMenu =
+      this.closest("body")?.querySelector("action-menu");
 
     if (!actionMenu) return;
     document.body.appendChild($deleteChatTemplate);
@@ -516,17 +571,17 @@ class Sidebar extends BaseComponent {
 
         this.loadChatList();
         Router.goToRoute("/");
-        
+
         // Show success toast
         toastService.success(
-          'Chat eliminado',
-          'El chat se eliminó correctamente.'
+          "Chat eliminado",
+          "El chat se eliminó correctamente.",
         );
       } else {
         console.error("Failed to delete chat:", chatId);
         toastService.error(
-          'Error al eliminar',
-          'No se pudo eliminar el chat. Inténtalo de nuevo.'
+          "Error al eliminar",
+          "No se pudo eliminar el chat. Inténtalo de nuevo.",
         );
       }
     });
@@ -535,21 +590,26 @@ class Sidebar extends BaseComponent {
   private setupChatBubbleListeners(): void {
     if (!this.$chatList) return;
 
-    this.$chatList.querySelectorAll(".chat-bubble").forEach((bubble) => {
-      bubble.addEventListener("click", (e) => {
-        const chatId = (e.currentTarget as HTMLElement).dataset.chatId;
-        if (chatId) {
-          this.selectChat(chatId);
-        }
+    this.$chatList
+      .querySelectorAll(".chat-bubble")
+      .forEach((bubble) => {
+        bubble.addEventListener("click", (e) => {
+          const chatId = (e.currentTarget as HTMLElement).dataset
+            .chatId;
+          if (chatId) {
+            this.selectChat(chatId);
+          }
+        });
       });
-    });
   }
 
   private selectChat(chatId: string): void {
     // Remove active class from all bubbles
-    this.shadowRoot?.querySelectorAll(".chat-bubble").forEach((bubble) => {
-      bubble.classList.remove("active");
-    });
+    this.shadowRoot
+      ?.querySelectorAll(".chat-bubble")
+      .forEach((bubble) => {
+        bubble.classList.remove("active");
+      });
 
     // Add active class to selected bubble
     const selectedBubble = this.shadowRoot?.querySelector(
@@ -571,9 +631,11 @@ class Sidebar extends BaseComponent {
 
   private updateActiveChatHighlight(_route: string): void {
     // Remove active class from all bubbles
-    this.$chatList?.querySelectorAll(".chat-bubble").forEach((bubble) => {
-      bubble.classList.remove("active");
-    });
+    this.$chatList
+      ?.querySelectorAll(".chat-bubble")
+      .forEach((bubble) => {
+        bubble.classList.remove("active");
+      });
 
     if (Router.isOnChatRoute()) {
       const chatId = Router.getCurrentChatId();
@@ -607,7 +669,11 @@ class Sidebar extends BaseComponent {
 
     // Add hover-expanded class when hovering over collapsed sidebar
     this.addEventListener("mouseenter", () => {
-      if (this.isCollapsed && !this.isManuallyCollapsed && !this.isMobile) {
+      if (
+        this.isCollapsed &&
+        !this.isManuallyCollapsed &&
+        !this.isMobile
+      ) {
         this.classList.add("hover-expanded");
       }
     });
@@ -641,7 +707,9 @@ class Sidebar extends BaseComponent {
       this.classList.add("mobile-mode");
       this.classList.remove("desktop-mode");
       // Update container layout
-      document.querySelector("chat-container")?.classList.add("mobile-layout");
+      document
+        .querySelector("chat-container")
+        ?.classList.add("mobile-layout");
     } else {
       this.classList.add("desktop-mode");
       this.classList.remove("mobile-mode");
@@ -676,7 +744,9 @@ class Sidebar extends BaseComponent {
     });
   }
 
-  private getTemplate(templateId: string): DocumentFragment | undefined {
+  private getTemplate(
+    templateId: string,
+  ): DocumentFragment | undefined {
     if (this.shadowRoot === null) return;
     const $template =
       this.shadowRoot.querySelector<HTMLTemplateElement>(templateId);

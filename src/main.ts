@@ -11,6 +11,7 @@ import "@/components/common/search-modal";
 import "@/components/common/toast-notification";
 import { storageService } from "@/services/store";
 import { toastService } from "@/services/toast-service";
+import { startTour } from "@/services/driver";
 
 // Make services available globally for debugging
 (window as any).toastService = toastService;
@@ -36,15 +37,15 @@ aiWorker.onmessage = (event) => {
   if (status === "ready") {
     document.dispatchEvent(new CustomEvent("app-ready"));
     toastService.success(
-      'UPIIChat listo',
-      'El asistente IA está preparado para ayudarte.'
+      "UPIIChat listo",
+      "El asistente IA está preparado para ayudarte.",
     );
   }
   if (status === "strategy-ready") {
     document.dispatchEvent(new CustomEvent("strategy-ready"));
     toastService.info(
-      'Modelo cargado',
-      'El modelo de IA está listo para responder tus preguntas.'
+      "Modelo cargado",
+      "El modelo de IA está listo para responder tus preguntas.",
     );
   }
   if (status === "answer") {
@@ -54,11 +55,12 @@ aiWorker.onmessage = (event) => {
   }
   if (status === "error") {
     console.error("Received error from AI Worker:", error);
-    
+
     // Show error toast notification
     toastService.error(
-      'Error del Asistente IA',
-      error || 'Ocurrió un problema al procesar tu mensaje. Inténtalo de nuevo.'
+      "Error del Asistente IA",
+      error ||
+        "Ocurrió un problema al procesar tu mensaje. Inténtalo de nuevo.",
     );
   }
 };
@@ -126,4 +128,51 @@ window.addEventListener("DOMContentLoaded", () => {
     // Add an event listener to run the function whenever the viewport resizes
     window.visualViewport.addEventListener("resize", handleViewportResize);
   }
+  if (appState.tutorialCompleted) return;
+  const chatInputElement = document.querySelector("chat-input");
+  const chatSidebarElement = document.querySelector("side-bar");
+  const chatHeaderElement = document.querySelector("chat-header");
+  if (
+    !chatInputElement?.shadowRoot ||
+    !chatSidebarElement?.shadowRoot ||
+    !chatHeaderElement?.shadowRoot
+  )
+    return;
+
+  const $searchButton =
+    chatInputElement.shadowRoot.querySelector<HTMLElement>("#searchButton");
+  const $modelSelectElement =
+    chatHeaderElement.shadowRoot.querySelector<HTMLElement>(".dropdown");
+  const $newChatElement =
+    chatSidebarElement.shadowRoot.querySelector<HTMLElement>("#new-chat");
+  const $toggleMenuElement =
+    chatSidebarElement.shadowRoot.querySelector<HTMLElement>("#sidebar-toggle");
+  const $moreToolsElement =
+    chatSidebarElement.shadowRoot.querySelector<HTMLElement>(
+      "#openMoreToolsModal",
+    );
+  const $settingsButtonElement =
+    chatSidebarElement.shadowRoot.querySelector<HTMLElement>(
+      "#openSettingsModal",
+    );
+
+  if (
+    !$searchButton ||
+    !$modelSelectElement ||
+    !$newChatElement ||
+    !$toggleMenuElement ||
+    !$moreToolsElement ||
+    !$settingsButtonElement
+  )
+    return;
+
+  // Start the tour once the app is ready
+  startTour(
+    $modelSelectElement,
+    $searchButton,
+    $newChatElement,
+    $toggleMenuElement,
+    $moreToolsElement,
+    $settingsButtonElement,
+  );
 });
