@@ -17,6 +17,7 @@ technologías web.
 
 - [ ] Crear componente tooltip para sugerencias de UI
 - [ ] Implementar UUID fallback si no está disponible `crypto.randomUUID()`
+- [ ] Detectar si el usuario ha instalado la PWA y agregar la etiqueta 'user-scalable=no' para hacer la experiencia más nativa
 - [ ] Mejorar accesibilidad de modal:
   - [ ] Gestionar el foco del teclado al abrir/cerrar el modal
   - [ ] Añadir atributos ARIA (`role="dialog"`, `aria-modal="true"`)
