@@ -151,18 +151,18 @@ window.addEventListener("DOMContentLoaded", () => {
     chatSidebarElement.shadowRoot.querySelector<HTMLElement>(
       "#openMoreToolsModal",
     );
-  const $settingsButtonElement =
-    chatSidebarElement.shadowRoot.querySelector<HTMLElement>(
-      "#openSettingsModal",
-    );
+  // const $settingsButtonElement =
+  //   chatSidebarElement.shadowRoot.querySelector<HTMLElement>(
+  //     "#openSettingsModal",
+  //   );
 
   if (
     !$searchButton ||
     !$modelSelectElement ||
     !$newChatElement ||
     !$toggleMenuElement ||
-    !$moreToolsElement ||
-    !$settingsButtonElement
+    !$moreToolsElement
+    // !$settingsButtonElement
   )
     return;
 
@@ -173,6 +173,6 @@ window.addEventListener("DOMContentLoaded", () => {
     $newChatElement,
     $toggleMenuElement,
     $moreToolsElement,
-    $settingsButtonElement,
+    // $settingsButtonElement,
   );
 });

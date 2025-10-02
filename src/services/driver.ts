@@ -8,14 +8,14 @@ export function startTour(
   newChatElement: HTMLElement,
   toggleMenuElement: HTMLElement,
   moreToolsElement: HTMLElement,
-  settingsButtonElement: HTMLElement,
+  // settingsButtonElement: HTMLElement,
 ) {
   const isMobile = () => window.innerWidth <= 700;
   const sidebarElements = [
     newChatElement,
     toggleMenuElement,
     moreToolsElement,
-    settingsButtonElement,
+    // settingsButtonElement,
   ];
 
   const tourSteps: DriveStep[] = [
@@ -76,16 +76,16 @@ export function startTour(
         align: "start",
       },
     },
-    {
-      element: settingsButtonElement,
-      popover: {
-        title: "⚙️ Configuraciones",
-        description:
-          "Personaliza tu experiencia y ajusta las configuraciones del asistente según tus preferencias.",
-        side: "right",
-        align: "start",
-      },
-    },
+    // {
+    //   element: settingsButtonElement,
+    //   popover: {
+    //     title: "⚙️ Configuraciones",
+    //     description:
+    //       "Personaliza tu experiencia y ajusta las configuraciones del asistente según tus preferencias.",
+    //     side: "right",
+    //     align: "start",
+    //   },
+    // },
   ];
 
   const driverObj = driver({

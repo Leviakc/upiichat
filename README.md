@@ -11,6 +11,7 @@ technologías web.
 
 - [ ] Usar `IndexedDB` para almacenar los _embeddings_ pre-calculados para cargas instantáneas en visitas recurrentes
 - [ ] Resolver bug del service worker
+- [ ] Terminar la funcionalidad de botón "Configurar"
 
 ### **Mejoras de UI/UX**
 
@@ -52,6 +53,7 @@ technologías web.
 - [x] Implementar menú de tres puntos para editar/eliminar chats (con long-press en móvil)
 - [x] Crear componente toast para notificaciones breves
 - [x] Implementar un buscador de preguntas si el bot puede no saber la respuesta y puede existir
+- [x] Implementar `driver.js` para crear un tour interactivo de la aplicación
 
 ### **Arquitectura y Despliegue**
 
